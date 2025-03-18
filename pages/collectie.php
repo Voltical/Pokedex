@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once 'Includes/database.inc.php';
+require_once '../Includes/database.inc.php';
 use Includes\Database;
 
 // Check of gebruiker is ingelogd
