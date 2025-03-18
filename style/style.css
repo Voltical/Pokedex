@@ -1,0 +1,771 @@
+/* Algemene reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+    background-color: rgb(239, 14, 14);
+    font-family: Arial, sans-serif;
+}
+
+/* Hero container */
+.hero {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+}
+
+/* Container */
+.container {
+    width: 90%;
+    max-width: 1200px;
+}
+
+/* Navbar styling */
+.navbar {
+    height: 60px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+/* Pokémon Logo */
+.logo {
+    height: 50px;
+    max-height: 50px;
+    object-fit: contain;
+}
+
+.navbar h1 {
+    font-size: 24px;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+  }
+
+/* Links */
+.navbar ul li a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+/* Het icoon */
+.navbar ul li a img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle; /* 🔑 Zorgt voor perfecte uitlijning */
+    border: 1px solid rgb(116, 116, 116);
+  }
+
+
+.navbar ul li a:hover {
+    color: gray;
+}
+
+/* Pokémon header */
+.pokemon-header {
+    display: flex;
+    justify-content: space-between; /* Titel links, filters rechts */
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Mobiel vriendelijk */
+}
+
+/* Filter + zoekbalk samen */
+.filter-search-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Ruimte tussen filter en searchbar */
+}
+
+/* Styling filter */
+#type-filter {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Styling zoekbalk */
+#search-bar {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 250px;
+}
+
+/* Zorg dat de container altijd erboven zit */
+.pokemon-container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Side Pokémon */
+.side-pokemon {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 190px;
+    pointer-events: none;
+}
+
+/* Linker Pokémon */
+.side-pokemon.left {
+    left: calc(50% - 600px - 65px); /* 600px is halve breedte container */
+    transform: translateY(-50%) rotate(-35deg); /* Flip horizontaal */
+}
+
+/* Rechter Pokémon */
+.side-pokemon.right {
+    right: calc(50% - 600px - 120px);
+    transform: translateY(-50%) scaleX(-1) rotate(-45deg); /* Flip horizontaal */
+}
+
+/* Basis */
+.type {
+    position: relative;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-top: 5px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: capitalize;
+    font-size: 14px;
+    overflow: hidden;
+    z-index: 1; /* Zorg dat tekst erboven ligt */
+}
+
+.type::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, var(--color1) 50%, var(--color2) 50%);
+    z-index: -1; /* Achter de tekst */
+    border-radius: 8px;
+}
+
+/* Pokémon groep */
+.pokemon-group {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    box-shadow: 0 8px 16px rgb(0, 0, 0);
+}
+
+.pokemon-group h2 {
+    margin-bottom: 15px;
+    font-size: 22px;
+}
+
+/* Pokémon grid */
+.pokemon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    width: 100%;
+    padding: 20px 0;
+    max-height: 520px;
+    overflow-y: auto;
+    grid-auto-rows: min-content;
+}
+
+/* Scrollbar breedte */
+.pokemon-grid::-webkit-scrollbar {
+    width: 12px;
+}
+
+/* Scrollbar track (achtergrond) */
+.pokemon-grid::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 10px;
+}
+
+/* Scrollbar thumb (de "grijper") */
+.pokemon-grid::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 10px;
+}
+
+/* Scrollbar thumb hover effect */
+.pokemon-grid::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+/* Pokémon kaart */
+/* Verwijder vaste hoogte */
+.pokemon-card {
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* =========================
+   POKÉMON MODAL STYLING
+   ========================= */
+
+/* Modal achtergrond (overlay) */
+#pokemon-modal {
+    display: none; /* Standaard verborgen */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Donkere overlay */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(6px); /* Mooie blur effect */
+}
+
+/* Modal inhoud */
+#pokemon-modal .modal-content {
+    background: white;
+    padding: 25px 20px;
+    border-radius: 16px;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    animation: popup 0.3s ease-out;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+/* Sluitknop voor Pokémon modal */
+#pokemon-modal .pokemon-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 26px;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+#pokemon-modal .pokemon-close-btn:hover {
+    color: #e52d27;
+}
+
+/* Titel */
+#pokemon-modal .modal-content h3 {
+    margin: 0 0 15px 0;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Afbeelding */
+#pokemon-modal .modal-content img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    margin: 10px 0 15px;
+    border-radius: 12px;
+}
+
+/* Informatie secties */
+#pokemon-modal .modal-content p {
+    margin: 8px 0;
+    font-size: 15px;
+    color: #333;
+}
+
+#pokemon-modal .modal-content p strong {
+    color: #555;
+    font-weight: bold;
+}
+
+/* Type badges */
+#pokemon-modal .type-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    margin: 4px 2px;
+    text-transform: capitalize;
+}
+
+/* Geslacht badge */
+#pokemon-modal .gender-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 12px;
+    margin: 4px 2px;
+    color: white;
+}
+
+/* Abilities badge */
+#pokemon-modal .ability-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+    color: white;
+    font-size: 12px;
+    margin: 2px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+/* Modal achtergrond (overlay) */
+#login-register-modal {
+    display: none; /* standaard verborgen */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* donkere overlay */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(6px); /* mooie blur */
+}
+
+/* Zorgt dat de close-btn niet zichtbaar is als modal dicht is */
+#login-register-modal:not([style*="display: flex"]) .close-btn {
+    display: none;
+}
+
+/* Inhoud modal */
+#login-register-modal .modal-content {
+    background: white;
+    padding: 30px 25px;
+    border-radius: 18px;
+    max-width: 400px;
+    width: 90%;
+    height: 460px; /* ✅ Vaste hoogte */
+    max-height: 90vh;
+    overflow: hidden; /* ✅ voorkomt dat inhoud buiten modal komt */
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    animation: popup 0.3s ease-out;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+
+/* Sluitknop netjes in de hoek */
+#login-register-modal .modal-content .login-close-btn {
+    position: absolute;
+    top: 10px; /* Mooier dan 12px */
+    right: 12px; /* Iets strakker */
+    font-size: 24px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#login-register-modal .modal-content .login-close-btn:hover {
+    color: #e52d27;
+}
+/* Tab headers (login/register switch) */
+#login-register-modal .modal-content .tab-header {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+#login-register-modal .modal-content .tab-header button {
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.3s, color 0.3s;
+}
+
+#login-register-modal .modal-content .tab-header button.active-tab {
+    border-color: #e52d27;
+    color: #e52d27;
+}
+
+/* Input velden */
+#login-register-modal .modal-content input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* ✅ Zorgt dat padding mee telt in breedte */
+    font-size: 15px;
+}
+
+/* Focus effect */
+#login-register-modal .modal-content input:focus {
+    border-color: #e52d27;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(229, 45, 39, 0.2);
+}
+
+/* Knoppen */
+#login-register-modal .modal-content button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background: #e52d27;
+    color: white;
+    font-size: 17px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+    box-sizing: border-box; /* ✅ */
+}
+
+/* Hover effect knop */
+#login-register-modal .modal-content button[type="submit"]:hover {
+    background: #b31217;
+}
+
+#login-register-modal .modal-content form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    padding: 0 10px;
+}
+
+/* Kleine tekst onder forms */
+#login-register-modal .modal-content .small-text {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Popup animatie */
+@keyframes popup {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+/* Popup animatie */
+@keyframes popup {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Verberg modals standaard */
+.modal {
+    display: none;
+}
+
+/* Zorg dat alleen zichtbaar bij display:flex */
+.modal .login-close-btn,
+.modal .pokemon-close-btn {
+    display: block;
+}
+
+/* Sluitknop */
+.close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 26px;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+/* Titel */
+.modal-content h3 {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    text-align: center;
+    color: #333;
+}
+
+/* Afbeelding */
+.modal-content img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 12px;
+    margin: 10px 0 15px;
+}
+
+/* Informatie sectie */
+.modal-content p {
+    margin: 6px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.modal-content p strong {
+    color: #555;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .modal-content {
+        max-width: 95%;
+        padding: 15px;
+    }
+    
+    .close-btn {
+        top: 8px;
+        right: 10px;
+    }
+}
+
+.divider-line {
+    width: 100%;
+    height: 4px;
+    background-color: red;
+}
+
+/* Nummer rechtsboven */
+.pokemon-number {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #999;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Pokémon afbeelding */
+.pokemon-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+    padding: 10px;
+    background: rgb(255, 255, 255); /* Zelfde als kaart */
+    border-top-left-radius: 15px; /* Zorg dat afbeelding netjes afgerond is bovenaan */
+    border-top-right-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.pokemon-card.active img {
+    transform: scale(0.9);
+}
+
+/* Naam */
+.pokemon-info {
+    background-color: #f3f3f3;
+    padding: 10px 0;
+    border-bottom-left-radius: 15px; /* Zorg dat onderkant afgerond is */
+    border-bottom-right-radius: 15px;
+    overflow: hidden; /* ✅ Voorkomt problemen bij hover */
+}
+
+.pokemon-info h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Hover effect */
+.pokemon-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.pokemon-card .pokemon-extra-info {
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.pokemon-card.active .pokemon-extra-info {
+    max-height: 200px;
+    opacity: 1;
+    padding: 10px;
+}
+
+/* Type badge */
+.type-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    margin: 4px 2px;
+    text-transform: capitalize;
+}
+
+/* Type colors (herbruik van kaart) */
+.type-vuur { background-color: #FC7C24; }
+.type-water { background-color: #6890F0; }
+.type-gras { background-color: #78C850; }
+.type-elektro { background-color: #EED535; }
+.type-psychic { background-color: #F85888; }
+.type-ijs { background-color: #98D8D8; }
+.type-dragon { background-color: #7038F8; }
+.type-dark { background-color: #705848; }
+.type-fairy { background-color: #EE99AC; }
+.type-fighting { background-color: #C03028; }
+.type-poison { background-color: #A040A0; }
+.type-ground { background-color: #E0C068; }
+.type-vliegend { background-color: #A890F0; }
+.type-bug { background-color: #739F3E; }
+.type-rock { background-color: #B8A038; }
+.type-ghost { background-color: #705898; }
+.type-steel { background-color: #B8B8D0; }
+.type-normaal { background-color: #A4ACAF; }
+
+/* Geslacht badge */
+.gender-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 12px;
+    margin: 4px 2px;
+    color: white;
+}
+
+/* Specifieke kleuren */
+.gender-man { background-color: #6890F0; } /* Blauw */
+.gender-vrouw { background-color: #EE99AC; } /* Roze */
+.gender-onbekend { background-color: #A4A4A4; } /* Grijs/Neutraal */
+
+/* Algemene stijl */
+.ability-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+    color: white;
+    font-size: 12px;
+    margin: 2px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+/* Type kleuren voor abilities */
+.ability-gras { background-color: #78C850; }
+.ability-vuur { background-color: #FC7C24; }
+.ability-water { background-color: #6890F0; }
+.ability-elektro { background-color: #EED535; }
+.ability-psychic { background-color: #F85888; }
+.ability-ijs { background-color: #98D8D8; }
+.ability-dragon { background-color: #7038F8; }
+.ability-dark { background-color: #705848; }
+.ability-fairy { background-color: #EE99AC; }
+.ability-fighting { background-color: #C03028; }
+.ability-poison { background-color: #A040A0; }
+.ability-ground { background-color: #E0C068; }
+.ability-vliegend { background-color: #A890F0; }
+.ability-bug { background-color: #739F3E; }
+.ability-rock { background-color: #B8A038; }
+.ability-ghost { background-color: #705898; }
+.ability-steel { background-color: #B8B8D0; }
+.ability-normaal { background-color: #A4ACAF; }
+
+.no-results {
+    text-align: center;
+    font-size: 18px;
+    color: gray;
+    padding: 20px;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+
+    .navbar h1 {
+        margin-bottom: 10px;
+    }
+
+    .navbar ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .pokemon-group h2 {
+        text-align: center;
+    }
+}
+
+/* Pokéball loader basis */
+.pokeball-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+
+/* Pokéball afbeelding */
+.pokeball-loader img {
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+/* Draai animatie */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
