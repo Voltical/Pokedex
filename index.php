@@ -152,7 +152,6 @@ $typeColors = [
             </div>
         </form>
 
-
         <!-- Register Form -->
         <form id="register-form" method="POST" action="./pages/register.php" style="display: none;">
             <h2>Registreren</h2>
