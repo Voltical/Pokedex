@@ -57,6 +57,7 @@ $typeColors = [
             <ul>
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Pokémons</a></li>
+                <li><a href="./pages/collectie.php">Collectie</a></li>
                 <li><a href="#">Contact</a></li>
                 <li>
                     <a href="#" class="account-link" id="account-btn">
