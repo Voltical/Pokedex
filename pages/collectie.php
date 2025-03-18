@@ -7,9 +7,9 @@ use Includes\Database;
 // Check of gebruiker is ingelogd
 $isLoggedIn = isset($_SESSION['user_id']); // Of andere login check
 // URL naar juiste pagina
-$accountLink = $isLoggedIn ? './pages/account.php' : './pages/login.php';
+$accountLink = $isLoggedIn ? '../pages/account.php' : '../pages/login.php';
 // Icoon afhankelijk van login
-$accountIcon = $isLoggedIn ? './assets/user.png' : './assets/favicon.png';
+$accountIcon = $isLoggedIn ? '../assets/user.png' : '../assets/favicon.png';
 // Tekst afhankelijk van login
 $accountText = $isLoggedIn ? 'Account' : 'Login';
 
@@ -44,15 +44,15 @@ $typeColors = [
 <head>
     <meta charset="UTF-8">
     <title>Pokédex | Home</title>
-    <link rel="stylesheet" href="./style/style.css">
-    <link rel="shortcut icon" href="./assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="shortcut icon" href="../assets/favicon.png" type="image/x-icon">
 </head>
 <body>
     <div class="hero">
         <!-- Navbar -->
         <div class="navbar container">
             <a href="#">
-                <img src="./assets/logo.png" alt="Pokédex Logo" class="logo">
+                <img src="../assets/logo.png" alt="Pokédex Logo" class="logo">
             </a>
             <ul>
                 <li><a href="#">Home</a></li>
@@ -67,8 +67,8 @@ $typeColors = [
             </ul>
         </div>
 
-        <img src="./assets/charmander.png" alt="Charmander" class="side-pokemon left">
-        <img src="./assets/fat_pikachy.png" alt="Pikachu" class="side-pokemon right">
+        <img src="../assets/charmander.png" alt="Charmander" class="side-pokemon left">
+        <img src="../assets/fat_pikachy.png" alt="Pikachu" class="side-pokemon right">
 
         <!-- Pokémon groep -->
         <div class="pokemon-container container">
@@ -140,7 +140,7 @@ $typeColors = [
         </div>
 
         <!-- Login Form -->
-        <form id="login-form" method="POST" action="./pages/login.php">
+        <form id="login-form" method="POST" action="../pages/login.php">
             <h2>Inloggen</h2>
             <input type="text" name="gebruikersnaam_email" placeholder="Gebruikersnaam of E-mail" required>
             <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
@@ -148,13 +148,13 @@ $typeColors = [
 
             <!-- Pokéball animatie -->
             <div id="pokeball-loader" class="pokeball-loader" style="display: none;">
-                <img src="./assets/favicon.png" alt="Loading">
+                <img src="../assets/favicon.png" alt="Loading">
             </div>
         </form>
 
 
         <!-- Register Form -->
-        <form id="register-form" method="POST" action="./pages/register.php" style="display: none;">
+        <form id="register-form" method="POST" action="../pages/register.php" style="display: none;">
             <h2>Registreren</h2>
             <input type="text" name="gebruikersnaam" placeholder="Gebruikersnaam" required>
             <input type="email" name="email" placeholder="E-mail" required>
@@ -167,7 +167,7 @@ $typeColors = [
 
 
 
-<script src="./script.js"></script>
+<script src="../script.js"></script>
 <script src="https://kit.fontawesome.com/bb89b598a6.js" crossorigin="anonymous"></script>
 </body>
 </html>
