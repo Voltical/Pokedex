@@ -104,7 +104,7 @@ $typeColors = [
                             ?>
                             <div class="pokemon-card" data-name="<?= htmlspecialchars($pokemon['name']) ?>" data-number="<?= str_pad($pokemon['number'], 3, '0', STR_PAD_LEFT) ?>" data-image="<?= htmlspecialchars($pokemon['image_url']) ?>" data-type="<?= $typeDisplay ?>" data-description="<?= htmlspecialchars($pokemon['description'] ?: '') ?>" data-gender="<?= htmlspecialchars($pokemon['gender'] ?: 'Onbekend') ?>" data-height="<?= htmlspecialchars($pokemon['height'] ?: 'Onbekend') ?>" data-weight="<?= htmlspecialchars($pokemon['weight'] ?: 'Onbekend') ?>" data-abilities="<?= htmlspecialchars($pokemon['abilities'] ?: 'Onbekend') ?>">
                                 <div class="pokemon-number">#<?= str_pad($pokemon['number'], 3, '0', STR_PAD_LEFT) ?></div>
-                                <img src="<?= htmlspecialchars($pokemon['image_url']) ?>" alt="<?= htmlspecialchars($pokemon['name']) ?>">
+                                <img src=".<?=htmlspecialchars($pokemon['image_url']) ?>" alt="<?= htmlspecialchars($pokemon['name']) ?>">
                                 <div class="divider-line"></div>
                                 <div class="pokemon-info">
                                     <h3><?= htmlspecialchars($pokemon['name']) ?></h3>

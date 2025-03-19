@@ -141,32 +141,64 @@ $typeColors = [
         </div>
 
         <!-- Login Form -->
-        <form id="login-form" method="POST" action="./pages/login.php">
+        <form id="login-form" method="POST" action="../pages/login.php">
             <h2>Inloggen</h2>
+            <p id="login-error" class="error-message">
+                <?php if(isset($_SESSION["login_error"])) { echo $_SESSION["login_error"]; unset($_SESSION["login_error"]); } ?>
+            </p>
             <input type="text" name="gebruikersnaam_email" placeholder="Gebruikersnaam of E-mail" required>
             <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
-            <button type="submit" id="login-btn">Inloggen</button>
-
-            <!-- Pokéball animatie -->
-            <div id="pokeball-loader" class="pokeball-loader" style="display: none;">
-                <img src="./assets/favicon.png" alt="Loading">
-            </div>
+            <button type="submit">Inloggen</button>
         </form>
+
 
         <!-- Register Form -->
         <form id="register-form" method="POST" action="./pages/register.php" style="display: none;">
             <h2>Registreren</h2>
+            <p id="register-error" class="error-message"></p> <!-- Hier komt de foutmelding -->
             <input type="text" name="gebruikersnaam" placeholder="Gebruikersnaam" required>
             <input type="email" name="email" placeholder="E-mail" required>
             <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
             <input type="password" name="wachtwoord_confirm" placeholder="Herhaal wachtwoord" required>
             <button type="submit">Registreren</button>
         </form>
+
     </div>
 </div>
 
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Haal de foutmeldingen uit de URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const modal = urlParams.get("modal");
 
+    if (modal === "login") {
+        document.getElementById("login-form").style.display = "block";
+        document.getElementById("register-form").style.display = "none";
+    } else if (modal === "register") {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("register-form").style.display = "block";
+    }
+
+    // Foutmeldingen uit PHP-sessie tonen
+    <?php
+    session_start();
+    if (isset($_SESSION["login_error"])) {
+        echo "document.getElementById('login-error').innerText = '{$_SESSION["login_error"]}';";
+        unset($_SESSION["login_error"]);
+    }
+    if (isset($_SESSION["register_error"])) {
+        echo "document.getElementById('register-error').innerText = '{$_SESSION["register_error"]}';";
+        unset($_SESSION["register_error"]);
+    }
+    if (isset($_SESSION["register_success"])) {
+        echo "document.getElementById('login-error').innerText = '{$_SESSION["register_success"]}';";
+        unset($_SESSION["register_success"]);
+    }
+    ?>
+});
+</script>
 <script src="./script.js"></script>
 <script src="https://kit.fontawesome.com/bb89b598a6.js" crossorigin="anonymous"></script>
 </body>

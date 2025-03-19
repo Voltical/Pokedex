@@ -478,6 +478,12 @@ body {
     color: #555;
 }
 
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
 /* Popup animatie */
 @keyframes popup {
     from {
