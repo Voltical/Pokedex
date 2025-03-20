@@ -1,11 +1,12 @@
 <?php
 session_start();
+header("Cache-Control: no-cache, must-revalidate"); 
 
 require_once 'Includes/database.inc.php';
 use Includes\Database;
 
 // Check of gebruiker is ingelogd
-$isLoggedIn = isset($_SESSION['user_id']); // Of andere login check
+$isLoggedIn = isset($_SESSION['user_id']); // ✅ Check of gebruiker ingelogd is
 // URL naar juiste pagina
 $accountLink = $isLoggedIn ? './pages/account.php' : './pages/login.php';
 // Icoon afhankelijk van login
@@ -13,9 +14,37 @@ $accountIcon = $isLoggedIn ? './assets/user.png' : './assets/favicon.png';
 // Tekst afhankelijk van login
 $accountText = $isLoggedIn ? 'Account' : 'Login';
 
+$profilePicture = $_SESSION['avatar'] ?? './assets/default-avatar.png';
 
-$pokemonQuery = "SELECT * FROM pokemons ORDER BY number ASC";
-$pokemons = Database::getData($pokemonQuery);
+
+// Controleer of "Mijn Collectie" is geselecteerd
+if ($isLoggedIn && isset($_GET['collection'])) {
+    $userId = $_SESSION['user_id'];
+    $pokemonQuery = "SELECT p.* FROM pokemons p
+                     INNER JOIN user_pokemon up ON p.number = up.pokemon_number
+                     WHERE up.user_id = ?";
+    $pokemons = Database::getData($pokemonQuery, [$userId]);
+    $pageTitle = "Mijn Collectie";
+} else {
+    $pokemonQuery = "SELECT * FROM pokemons ORDER BY number ASC";
+    $pokemons = Database::getData($pokemonQuery);
+    $pageTitle = "Alle Pokémons";
+}
+
+$pokemonInCollection = false; // Standaard false
+
+if ($isLoggedIn && isset($_GET['pokemon_id'])) {
+    $pokemonId = $_GET['pokemon_id'];
+    
+    // ✅ Controleer of de Pokémon al in de collectie van de gebruiker zit
+    $query = "SELECT COUNT(*) AS count FROM user_pokemon WHERE user_id = ? AND pokemon_number = ?";
+    $result = Database::getData($query, [$userId, $pokemonId]);
+
+    if ($result[0]['count'] > 0) {
+        $pokemonInCollection = true;
+    }
+}
+
 
 $typeColors = [
     'vuur' => '#FC7C24',
@@ -47,30 +76,23 @@ $typeColors = [
     <link rel="stylesheet" href="./style/style.css">
     <link rel="shortcut icon" href="./assets/favicon.png" type="image/x-icon">
 </head>
-<body>
+<body data-logged-in="<?= $isLoggedIn ? 'true' : 'false' ?>">
     <div class="hero">
         <!-- Navbar -->
         <div class="navbar container">
-            <a href="#">
+            <a href="./index.php">
                 <img src="./assets/logo.png" alt="Pokédex Logo" class="logo">
             </a>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Pokémons</a></li>
+                <li><a href="./index.php">Home</a></li>
+                <li><a href="./index.php?collection=1">Collectie</a></li>
                 <li><a href="#">Contact</a></li>
                 <li>
                     <a href="#" class="account-link" id="account-btn">
-                        <img src="<?php echo $accountIcon; ?>" alt="<?php echo $accountText; ?>" width="32" height="32">
+                        <img src="<?= isset($_SESSION['user_id']) ? ($_SESSION['avatar'] ?? './assets/user.png') : './assets/favicon.png' ?>" 
+                            alt="Profielfoto" width="32" height="32">
                     </a>
                 </li>
-                <div id="account-modal" class="modal" style="display: none;">
-                    <div class="modal-content">
-                        <span class="account-close-btn">&times;</span>
-                        <h2>Mijn account</h2>
-                        <p>Gebruikersnaam: <?php echo $_SESSION['username'] ?? 'Onbekend'; ?></p>
-                        <button id="logout-btn">Uitloggen</button>
-                    </div>
-                </div>
             </ul>
         </div>
 
@@ -134,41 +156,83 @@ $typeColors = [
         <div id="pokemon-modal-content">
             <!-- Dynamische inhoud hier -->
         </div>
+        <?php if ($isLoggedIn): ?>
+            <form method="POST" action="./pages/add_to_collection.php" id="add-to-collection-form">
+                <input type="hidden" name="pokemon_id" id="modal-pokemon-id">
+                <button type="submit" id="collectie-btn">Toevoegen aan collectie</button>
+            </form>
+        <?php endif; ?>
     </div>
 </div>
 
 
-<div id="login-register-modal" class="modal">
-    <div class="modal-content">
-        <span class="login-close-btn">&times;</span> <!-- Unieke class hier -->
-        <div class="tab-header">
-            <button id="login-tab" class="active-tab">Inloggen</button>
-            <button id="register-tab">Registreren</button>
+            <!-- ✅ Account modal tonen als ingelogd -->
+            <?php if ($isLoggedIn): ?>
+                <div id="account-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-btn">&times;</span>
+                        <h2>Mijn account</h2>
+                        
+                        <!-- ✅ Profielfoto -->
+                        <img id="account-avatar" src="<?= $_SESSION['avatar'] ?? './assets/user.png' ?>" alt="Profielfoto">
+                        
+                        <!-- ✅ Gebruikersnaam -->
+                        <p>Gebruikersnaam: <strong><?= $_SESSION['username'] ?? 'Onbekend' ?></strong></p>
+
+                        <!-- ✅ Bewerken Knop -->
+                        <button id="edit-profile-btn">Bewerken</button>
+
+                        <!-- ✅ Uitlogknop -->
+                        <button id="logout-btn">Uitloggen</button>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <div id="login-register-modal" class="modal">
+                <div class="modal-content">
+                    <span class="login-close-btn">&times;</span>
+                    <div class="tab-header">
+                        <button id="login-tab" class="active-tab">Inloggen</button>
+                        <button id="register-tab">Registreren</button>
+                    </div>
+
+                    <!-- ✅ Login Form -->
+                    <form id="login-form" method="POST" action="./pages/login.php">
+                        <input type="text" name="gebruikersnaam_email" placeholder="Gebruikersnaam of E-mail" required>
+                        <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
+                        <button type="submit">Inloggen</button>
+                    </form>
+
+                    <!-- ✅ Register Form -->
+                    <form id="register-form" style="display: none;"> <!-- ✅ Start als verborgen -->
+                        <input type="text" id="reg-username" name="username" placeholder="Gebruikersnaam" required>
+                        <input type="email" id="reg-email" name="email" placeholder="E-mail" required>
+                        <input type="password" id="reg-password" name="password" placeholder="Wachtwoord" required>
+                        <input type="password" id="reg-password-confirm" name="password_confirm" placeholder="Herhaal wachtwoord" required>
+                        <button type="submit">Registreren</button>
+                    </form>
+                </div>
+            </div>
+
+        <!-- Profiel Bewerken Modal -->
+        <div id="profile-edit-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2>Profiel bewerken</h2>
+                <form id="profile-edit-form" action="./pages/update_profile.php" method="POST" enctype="multipart/form-data">
+                    <label for="new_username">Nieuwe gebruikersnaam:</label>
+                    <input type="text" id="new_username" name="new_username" required>
+                    
+                    <label for="avatar">Nieuwe profielfoto:</label>
+                    <input type="file" id="avatar" name="avatar" accept="image/*">
+                    
+                    <button type="submit">Opslaan</button>
+                </form>
+            </div>
         </div>
 
-        <!-- Login Form -->
-        <form id="login-form" method="POST" action="./pages/login.php">
-            <h2>Inloggen</h2>
-            <input type="text" name="gebruikersnaam_email" placeholder="Gebruikersnaam of E-mail" autocomplete="off" required>
-            <input type="password" name="wachtwoord" placeholder="Wachtwoord" autocomplete="off" required>
-            <button type="submit" id="login-btn">Inloggen</button>
 
-            <!-- Pokéball animatie -->
-            <div id="pokeball-loader" class="pokeball-loader" style="display: none;">
-                <img src="./assets/favicon.png" alt="Loading">
-            </div>
-        </form>
 
-        <!-- Register Form -->
-        <form id="register-form">
-            <h2>Registreren</h2>
-            <input type="text" id="reg-username" name="username" placeholder="Gebruikersnaam" autocomplete="off" required>
-            <input type="email" id="reg-email" name="email" placeholder="E-mail" autocomplete="off" required>
-            <input type="password" id="reg-password" name="password" placeholder="Wachtwoord" autocomplete="off" required>
-            <input type="password" id="reg-password-confirm" name="password_confirm" placeholder="Herhaal wachtwoord" autocomplete="off" required>
-            <button type="submit">Registreren</button>
-            <p id="register-error" class="error" style="color:white; display:none;"></p>
-        </form>
 
 
 
