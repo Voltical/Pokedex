@@ -33,7 +33,7 @@ $gebruiker = $profiel[0];
     <p><strong>Email:</strong> <?= htmlspecialchars($gebruiker['email']) ?></p>
 
     <?php if (!empty($gebruiker['avatar_url'])): ?>
-        <img src="<?= htmlspecialchars($gebruiker['avatar_url']) ?>" alt="Profielfoto" width="150">
+        <img src=".<?= htmlspecialchars($gebruiker['avatar_url']) ?>" alt="Profielfoto" width="150">
     <?php else: ?>
         <img src="../default-avatar.png" alt="Geen profielfoto" width="150">
     <?php endif; ?>

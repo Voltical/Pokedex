@@ -63,7 +63,14 @@ $typeColors = [
                         <img src="<?php echo $accountIcon; ?>" alt="<?php echo $accountText; ?>" width="32" height="32">
                     </a>
                 </li>
-
+                <div id="account-modal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="account-close-btn">&times;</span>
+                        <h2>Mijn account</h2>
+                        <p>Gebruikersnaam: <?php echo $_SESSION['username'] ?? 'Onbekend'; ?></p>
+                        <button id="logout-btn">Uitloggen</button>
+                    </div>
+                </div>
             </ul>
         </div>
 
@@ -76,14 +83,14 @@ $typeColors = [
                 <div class="pokemon-header">
                     <h2 id="pokemon-title">Alle Pokémons</h2>
                     <div class="filter-search-group">
-                        <select id="type-filter" onchange="filterPokemons()">
-                            <option value="all">Alle types</option>
-                            <?php foreach ($typeColors as $type => $color): ?>
-                                <option value="<?= htmlspecialchars($type) ?>">
-                                    <?= $type === 'ijs' ? 'Ice' : ucfirst($type) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+                    <select id="type-filter">
+                        <option value="all">Alle types</option>
+                        <?php foreach ($typeColors as $type => $color): ?>
+                            <option value="<?= htmlspecialchars($type) ?>">
+                                <?= $type === 'ijs' ? 'Ice' : ucfirst($type) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                         <input type="text" id="search-bar" placeholder="Zoek een Pokémon..." onkeyup="searchPokemon()">
                     </div>
                 </div>
@@ -142,8 +149,8 @@ $typeColors = [
         <!-- Login Form -->
         <form id="login-form" method="POST" action="./pages/login.php">
             <h2>Inloggen</h2>
-            <input type="text" name="gebruikersnaam_email" placeholder="Gebruikersnaam of E-mail" required>
-            <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
+            <input type="text" name="gebruikersnaam_email" placeholder="Gebruikersnaam of E-mail" autocomplete="off" required>
+            <input type="password" name="wachtwoord" placeholder="Wachtwoord" autocomplete="off" required>
             <button type="submit" id="login-btn">Inloggen</button>
 
             <!-- Pokéball animatie -->
@@ -153,16 +160,17 @@ $typeColors = [
         </form>
 
         <!-- Register Form -->
-        <form id="register-form" method="POST" action="./pages/register.php" style="display: none;">
+        <form id="register-form">
             <h2>Registreren</h2>
-            <input type="text" name="gebruikersnaam" placeholder="Gebruikersnaam" required>
-            <input type="email" name="email" placeholder="E-mail" required>
-            <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
-            <input type="password" name="wachtwoord_confirm" placeholder="Herhaal wachtwoord" required>
+            <input type="text" id="reg-username" name="username" placeholder="Gebruikersnaam" autocomplete="off" required>
+            <input type="email" id="reg-email" name="email" placeholder="E-mail" autocomplete="off" required>
+            <input type="password" id="reg-password" name="password" placeholder="Wachtwoord" autocomplete="off" required>
+            <input type="password" id="reg-password-confirm" name="password_confirm" placeholder="Herhaal wachtwoord" autocomplete="off" required>
             <button type="submit">Registreren</button>
+            <p id="register-error" class="error" style="color:white; display:none;"></p>
         </form>
-    </div>
-</div>
+
+
 
 
 

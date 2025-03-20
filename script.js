@@ -4,28 +4,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================
     const accountBtn = document.getElementById('account-btn');
     const loginModal = document.getElementById('login-register-modal');
-    const loginCloseBtn = loginModal.querySelector('.login-close-btn');
+    const loginCloseBtn = loginModal?.querySelector('.login-close-btn');
     const loginTab = document.getElementById('login-tab');
     const registerTab = document.getElementById('register-tab');
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
+    const registerError = document.getElementById("register-error");
 
-    accountBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        loginModal.style.display = 'flex';
-        showLogin();
-    });
+    if (accountBtn) {
+        accountBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.style.display = 'flex';
+            showLogin();
+        });
+    }
+    
 
-    loginCloseBtn.addEventListener('click', () => {
-        loginModal.style.display = 'none';
-    });
+    if (loginCloseBtn) {
+        loginCloseBtn.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+        });
+    }
 
     window.addEventListener('click', (e) => {
         if (e.target === loginModal) loginModal.style.display = 'none';
     });
 
-    loginTab.addEventListener('click', showLogin);
-    registerTab.addEventListener('click', showRegister);
+    loginTab?.addEventListener('click', showLogin);
+    registerTab?.addEventListener('click', showRegister);
 
     function showLogin() {
         loginForm.style.display = 'block';
@@ -42,18 +48,78 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================
+    // AJAX REGISTRATIE
+    // ============================
+    if (registerForm) {
+        registerForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let formData = new FormData(registerForm);
+            formData.append("password_confirm", document.getElementById("reg-password-confirm").value);
+
+            fetch("./pages/register.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text()) // Eerst uitlezen als tekst
+            .then(data => {
+                console.log("Server response:", data); // Debugging: toon volledige server response
+                try {
+                    let jsonData = JSON.parse(data);
+                    console.log("Parsed JSON:", jsonData); // Debugging JSON
+                    if (jsonData.success) {
+                        window.location.href = "./index.php";
+                    } else {
+                        registerError.innerText = jsonData.message;
+                        registerError.style.display = "block";
+                    }
+                } catch (e) {
+                    console.error("Fout bij JSON verwerken:", e);
+                    registerError.innerText = "Fout bij registratie. Probeer opnieuw.";
+                    registerError.style.display = "block";
+                }
+            })            
+            .then(data => {
+                console.log("Server response:", data); // Debugging
+                try {
+                    let jsonData = JSON.parse(data);
+                    if (jsonData.success) {
+                        window.location.href = "./index.php";
+                    } else {
+                        registerError.innerText = jsonData.message;
+                        registerError.style.display = "block";
+                    }
+                } catch (e) {
+                    console.error("Fout bij JSON verwerken:", e);
+                    registerError.innerText = "Fout bij registratie. Probeer opnieuw.";
+                    registerError.style.display = "block";
+                }
+            })
+            .catch(error => {
+                console.error("Fetch error:", error);
+                registerError.innerText = "Er is een fout opgetreden. Probeer opnieuw.";
+                registerError.style.display = "block";
+            });
+        });
+    }
+
+    // ============================
     // POKÉMON MODAL
     // ============================
     const pokemonModal = document.getElementById('pokemon-modal');
-    const pokemonCloseBtn = pokemonModal.querySelector('.pokemon-close-btn');
+    const pokemonCloseBtn = pokemonModal?.querySelector('.pokemon-close-btn');
 
-    pokemonCloseBtn.addEventListener('click', () => {
-        pokemonModal.style.display = 'none';
-    });
+    if (pokemonCloseBtn) {
+        pokemonCloseBtn.addEventListener('click', () => {
+            pokemonModal.style.display = 'none';
+        });
+    }
 
-    pokemonModal.addEventListener('click', (e) => {
-        if (e.target === pokemonModal) pokemonModal.style.display = 'none';
-    });
+    if (pokemonModal) {
+        pokemonModal.addEventListener('click', (e) => {
+            if (e.target === pokemonModal) pokemonModal.style.display = 'none';
+        });
+    }
 
     document.querySelectorAll('.pokemon-card').forEach(card => {
         card.addEventListener('click', function () {
@@ -88,80 +154,75 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ============================
-    // TYPE CONVERSIE & KLEUREN
-    // ============================
-    document.querySelectorAll('.pokemon-type').forEach(el => {
-        const types = el.dataset.types.split(',');
-        el.innerText = types.map(t => t.charAt(0).toUpperCase() + t.slice(1)).join(' & ');
-        types.forEach(type => el.classList.add('type-' + type.trim().toLowerCase()));
-        if (types.length > 1) el.classList.add('multi-type');
-    });
-
-    // ============================
     // SEARCH FUNCTION
     // ============================
-    document.getElementById('search-bar').addEventListener('keyup', () => {
-        const input = document.getElementById('search-bar').value.toLowerCase();
-        const cards = document.querySelectorAll('.pokemon-card');
-        let found = 0;
+    const searchBar = document.getElementById('search-bar');
+    if (searchBar) {
+        searchBar.addEventListener('keyup', () => {
+            const input = searchBar.value.toLowerCase();
+            const cards = document.querySelectorAll('.pokemon-card');
+            let found = 0;
 
-        cards.forEach(card => {
-            const name = card.querySelector('h3').innerText.toLowerCase();
-            if (name.includes(input)) {
-                card.style.display = 'block';
-                found++;
-            } else {
-                card.style.display = 'none';
-            }
+            cards.forEach(card => {
+                const name = card.querySelector('h3').innerText.toLowerCase();
+                if (name.includes(input)) {
+                    card.style.display = 'block';
+                    found++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.getElementById('no-results').style.display = found === 0 ? 'block' : 'none';
         });
-
-        document.getElementById('no-results').style.display = found === 0 ? 'block' : 'none';
-    });
+    }
 
     // ============================
     // FILTER FUNCTION
     // ============================
-    document.getElementById('type-filter').addEventListener('change', () => {
+    document.getElementById('type-filter').addEventListener('change', filterPokemons);
+
+    function filterPokemons() {
         const selectedType = document.getElementById('type-filter').value;
         const pokemonTitle = document.getElementById('pokemon-title');
         const cards = document.querySelectorAll('.pokemon-card');
-
+    
         pokemonTitle.innerText = selectedType === 'all'
             ? 'Alle Pokémons'
             : `${selectedType === 'ijs' ? 'Ice' : capitalize(selectedType)} Pokémons`;
-
+    
         cards.forEach(card => {
             const typeElement = card.querySelector('.type');
             const typeClasses = typeElement.className.split(' ');
             const hasType = selectedType === 'all' || typeClasses.includes('type-' + selectedType);
             card.style.display = hasType ? 'block' : 'none';
         });
-    });
-
-    // ============================
-    // Helper voor hoofdletter
-    // ============================
+    }
     function capitalize(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
-});
+        
 
-document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('login-form');
+
+    // ============================
+    // LOGIN FORM LOADER
+    // ============================
     const loginBtn = document.getElementById('login-btn');
     const pokeballLoader = document.getElementById('pokeball-loader');
 
-    loginForm.addEventListener('submit', function (e) {
-        e.preventDefault(); // Voorkomt direct versturen
+    if (loginForm && loginBtn && pokeballLoader) {
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault(); // Voorkomt direct versturen
 
-        // Pokéball tonen en knop uitschakelen
-        pokeballLoader.style.display = 'flex';
-        loginBtn.disabled = true;
-        loginBtn.innerText = 'Bezig met inloggen...';
+            // Pokéball tonen en knop uitschakelen
+            pokeballLoader.style.display = 'flex';
+            loginBtn.disabled = true;
+            loginBtn.innerText = 'Bezig met inloggen...';
 
-        // Wacht 2 seconden (2000 ms) en verstuur daarna het formulier
-        setTimeout(() => {
-            loginForm.submit(); // Formulier nu echt versturen
-        }, 2000); // Tijd in milliseconden
-    });
+            // Wacht 2 seconden (2000 ms) en verstuur daarna het formulier
+            setTimeout(() => {
+                loginForm.submit(); // Formulier nu echt versturen
+            }, 2000);
+        });
+    }
 });

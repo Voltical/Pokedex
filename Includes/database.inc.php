@@ -11,6 +11,7 @@
         private static $result         = array();
         private static $numrows     = -1;
         private static $currentrow     = -1;
+        private static $lastinsertedrow;
 
         private static function dbConnect() {
             $dbhost        = "localhost";
@@ -55,6 +56,7 @@
             $result = $stmt->fetchAll(); // get result
             database::$result = $result; // set class var
             database::$currentrow = 0;    // set current row
+            $id = $pdo->lastInsertId();
             if($print === true) { print_r($result); }
             return $result; // database query result
         }
@@ -70,6 +72,10 @@
             }
         
             if($print === true) { echo "Data inserted/updated!"; }
+        }
+
+        public static function getLastInsertedRow() {
+            return Database::$lastinsertedrow;
         }
 
         public static function getNumrows() {
