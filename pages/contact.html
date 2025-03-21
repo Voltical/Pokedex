@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Pokédex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <div class="max-w-3xl mx-auto p-6">
+    <h1 class="text-4xl font-bold mb-6 text-center text-red-500">Contact Us</h1>
+
+    <p class="mb-8 text-center text-lg">Heb je vragen, feedback of een Pokémon gespot die nog ontbreekt? Laat het ons weten!</p>
+
+    <form action="#" method="POST" class="bg-white shadow-md rounded-2xl p-8 space-y-6">
+      <div>
+        <label class="block text-lg font-medium mb-2">Olivia Hartman</label>
+        <input type="text" name="name" required class="w-full border border-gray-300 p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400">
+      </div>
+
+      <div>
+        <label class="block text-lg font-medium mb-2">Olivahartman@vistacollege.nl</label>
+        <input type="email" name="email" required class="w-full border border-gray-300 p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400">
+      </div>
+
+      <div>
+        <label class="block text-lg font-medium mb-2">feedback</label>
+        <textarea name="message" rows="5" required class="w-full border border-gray-300 p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400"></textarea>
+      </div>
+
+      <button type="submit" class="w-full bg-red-500 text-white font-bold py-4 rounded-xl hover:bg-red-600 transition duration-300">Verstuur</button>
+    </form>
+
+    <div class="mt-10 text-center text-sm text-gray-500">
+      📍 Pallet Town, Kanto Region | ✉️ contact@pokedex.com
+    </div>
+  </div>
+
+</body>
+</html>
