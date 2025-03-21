@@ -71,17 +71,16 @@
   const winMessage = document.getElementById('win-message');
   const grass = document.getElementById('grass');
 
-  // ✅ Gescheiden lijsten
   const flyingPokemonList = [
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/17.png', // Pidgeotto
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/41.png'  // Zubat
+    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/17.png',
+    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/41.png'
   ];
   const groundPokemonList = [
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png', // Pikachu
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',  // Bulbasaur
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png',  // Charmander
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png',  // Squirtle
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/39.png'  // Jigglypuff
+    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png',
+    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
+    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png',
+    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png',
+    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/39.png'
   ];
 
   let pokemons = [];
@@ -127,38 +126,35 @@
   }
 
   function spawnPokemons() {
-  pokemons = [];
-  const clouds = gameArea.querySelectorAll('.cloud');
-  const win = document.getElementById('win-message');
-  const grassEl = document.getElementById('grass');
-  gameArea.innerHTML = '';
-  clouds.forEach(cloud => gameArea.appendChild(cloud));
-  gameArea.appendChild(win);
-  gameArea.appendChild(grassEl);
+    pokemons = [];
+    const clouds = gameArea.querySelectorAll('.cloud');
+    const win = document.getElementById('win-message');
+    const grassEl = document.getElementById('grass');
+    gameArea.innerHTML = '';
+    clouds.forEach(cloud => gameArea.appendChild(cloud));
+    gameArea.appendChild(win);
+    gameArea.appendChild(grassEl);
 
-  // Spawn ground Pokémon op random hoogte net boven het gras
-  groundPokemonList.forEach(src => {
-    const poke = document.createElement('div');
-    poke.classList.add('pokemon', 'ground');
-    // Willekeurige 'bottom' waarde zodat ze niet steeds exact op 100px lopen
-    poke.style.bottom = `${80 + Math.random() * 40}px`; // Tussen 80 en 120
-    poke.style.animationDuration = `${Math.random() * 5 + 4}s`;
-    poke.style.backgroundImage = `url(${src})`;
-    gameArea.appendChild(poke);
-    pokemons.push(poke);
-  });
+    groundPokemonList.forEach(src => {
+      const poke = document.createElement('div');
+      poke.classList.add('pokemon', 'ground');
+      poke.style.bottom = `${80 + Math.random() * 40}px`;
+      poke.style.animationDuration = `${Math.random() * 5 + 4}s`;
+      poke.style.backgroundImage = `url(${src})`;
+      gameArea.appendChild(poke);
+      pokemons.push(poke);
+    });
 
-  // Spawn flying Pokémon op random hoogte in de lucht
-  flyingPokemonList.forEach(src => {
-    const poke = document.createElement('div');
-    poke.classList.add('pokemon', 'flying');
-    poke.style.top = `${Math.random() * 200 + 30}px`; // Tussen 30 en 230px
-    poke.style.animationDuration = `${Math.random() * 5 + 4}s`;
-    poke.style.backgroundImage = `url(${src})`;
-    gameArea.appendChild(poke);
-    pokemons.push(poke);
-  });
-}
+    flyingPokemonList.forEach(src => {
+      const poke = document.createElement('div');
+      poke.classList.add('pokemon', 'flying');
+      poke.style.top = `${Math.random() * 200 + 30}px`;
+      poke.style.animationDuration = `${Math.random() * 5 + 4}s`;
+      poke.style.backgroundImage = `url(${src})`;
+      gameArea.appendChild(poke);
+      pokemons.push(poke);
+    });
+  }
 
   createGrassBlades();
   spawnPokemons();
@@ -184,19 +180,24 @@
       const ballRect = pokeball.getBoundingClientRect();
       let hit = false;
 
-      pokemons.forEach((poke, index) => {
-        if (!poke) return;
-        const pokeRect = poke.getBoundingClientRect();
-        if (ballRect.left < pokeRect.right && ballRect.right > pokeRect.left &&
-            ballRect.top < pokeRect.bottom && ballRect.bottom > pokeRect.top) {
+      for (let index = 0; index < pokemons.length; index++) {
+        const poke = pokemons[index];
+        if (!poke) continue;
+        const pokeRect = poke.getBoundingClientRect(); // Grijp live positie opnieuw
+
+        if (ballRect.left < pokeRect.right &&
+            ballRect.right > pokeRect.left &&
+            ballRect.top < pokeRect.bottom &&
+            ballRect.bottom > pokeRect.top) {
           vangstAnimatie(poke.offsetLeft, poke.offsetTop);
           poke.remove();
           pokemons[index] = null;
           updateScore();
           result.textContent = "🎉 Je hebt een Pokémon gevangen!";
           hit = true;
+          break; // ✅ Stop bij eerste vangst
         }
-      });
+      }
 
       if (!hit) {
         result.textContent = "❌ Mis! -1 leven";
