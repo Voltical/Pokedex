@@ -38,8 +38,9 @@ try {
 
     // Wachtwoord hash en gebruiker invoegen
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
-    $sql_insert = "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)";
-    Database::insertData($sql_insert, [$username, $email, $password_hash]);
+    $sql = "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)";
+    Database::executeQuery($sql, [$username, $email, $password_hash]);
+    
 
     // Haal de ID op van de nieuw aangemaakte gebruiker
     $user = Database::getData("SELECT id FROM users WHERE email = ? LIMIT 1", [$email]);

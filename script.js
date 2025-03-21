@@ -364,3 +364,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 2000);
         });
     }})
+
+    function updateFileName() {
+        const fileInput = document.getElementById("avatar");
+        const fileName = document.getElementById("file-name");
+        
+        if (fileInput.files.length > 0) {
+            fileName.textContent = fileInput.files[0].name;
+        } else {
+            fileName.textContent = "Geen bestand gekozen";
+        }
+    }
+    
