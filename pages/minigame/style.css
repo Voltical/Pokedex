@@ -1,0 +1,49 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.memory-game{
+    display: grid;
+    grid-template-columns: repeat(4,100px);
+    grid-gap: 10px;
+    justify-content: center;
+
+}
+
+.card{
+    width: 100px;
+    height: 100px;
+    background: url( https://www.bing.com/images/search?view=detailV2&ccid=np2Dkr%2bO&id=246C1AAAC87475B2C2B5EF8FE679EC3A9F6E1487&thid=OIP.np2Dkr-O2hAqmWMc-qpHKgHaEo&mediaurl=https%3a%2f%2fwallpaperaccess.com%2ffull%2f133526.jpg&cdnurl=https%3a%2f%2fth.bing.com%2fth%2fid%2fR.9e9d8392bf8eda102a99631cfaaa472a%3frik%3dhxRunzrseeaP7w%26pid%3dImgRaw%26r%3d0&exph=1200&expw=1920&q=pokemon+background&simid=608005462800891113&FORM=IRPRST&ck=F41B251F6BAE36AE3C324BE3FF27373E&selectedIndex=0&itb=0&ajaxhist=0&ajaxserp=0) no-repeat center center ;
+    background-size: cover;
+    cursor: pointer;
+
+}
+
+.card img{
+    width: 100px;
+    display: none;
+}
+
+.card flipped img{
+    display: block;
+
+}
+
+.hidden{
+    display: none;
+}
+
+.start-button, .restart-button{
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: red;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 5px;
+
+
+}
+
