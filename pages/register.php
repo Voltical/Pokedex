@@ -3,8 +3,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header('Content-Type: application/json');
 
-session_start();
-require_once '../Includes/database.inc.php';
+$root = "../";
+require_once($root . "Includes/config.inc.php");
+
+//session_start();
+//require_once '../Includes/database.inc.php';
 use Includes\Database;
 
 $response = ['success' => false, 'message' => ''];

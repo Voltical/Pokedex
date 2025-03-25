@@ -1,8 +1,7 @@
 <?php
-session_start();
-header("Cache-Control: no-cache, must-revalidate");
+$root = "";
+require_once "Includes/config.inc.php";
 
-require_once "Includes/database.inc.php";
 use Includes\Database;
 
 // Check of gebruiker is ingelogd
@@ -151,13 +150,20 @@ $typeColors = [
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($leaderboard as $index => $user): ?>
-                                <tr>
-                                    <td>#<?= $index + 1 ?></td>
-                                    <td><?= htmlspecialchars($user["username"]) ?></td>
-                                    <td><?= $user["total_pokemon"] ?></td>
-                                </tr>
-                            <?php endforeach; ?>
+                            <?php 
+                                if(isset($leaderboard)) {
+                                    foreach ($leaderboard as $index => $user): ?>
+                                    <tr>
+                                        <td>#<?= $index + 1 ?></td>
+                                        <td><?= htmlspecialchars($user["username"]) ?></td>
+                                        <td><?= $user["total_pokemon"] ?></td>
+                                    </tr>
+                         <?php
+                                    endforeach; 
+                                
+                                }
+                                    
+                        ?>
                         </tbody>
                     </table>
                 </div>
@@ -269,15 +275,22 @@ $typeColors = [
 
                     <!-- ✅ Login Form -->
                     <form id="login-form" method="POST" action="./pages/login.php">
-                        <input type="text" name="gebruikersnaam_email" placeholder="Gebruikersnaam of E-mail" required>
+                        <input type="text" name="gebruikersnaam_email" placeholder="Gebruikersnaam of E-mail" autocomplete="off" required>
                         <input type="password" name="wachtwoord" placeholder="Wachtwoord" required>
                         <button type="submit">Inloggen</button>
+                        <!-- ✅ Hier komt de foutmelding -->
+                        <?php if (isset($_SESSION['login_error'])): ?>
+                            <p id="login-error" class="error-message"><?= htmlspecialchars($_SESSION['login_error']) ?></p>
+                            <?php unset($_SESSION['login_error']); ?>
+                        <?php else: ?>
+                            <p id="login-error" class="error-message" style="display: none;"></p>
+                        <?php endif; ?>
                     </form>
 
                     <!-- ✅ Register Form -->
                     <form id="register-form" style="display: none;"> <!-- ✅ Start als verborgen -->
-                        <input type="text" id="reg-username" name="username" placeholder="Gebruikersnaam" required>
-                        <input type="email" id="reg-email" name="email" placeholder="E-mail" required>
+                        <input type="text" id="reg-username" name="username" placeholder="Gebruikersnaam" autocomplete="off" required>
+                        <input type="email" id="reg-email" name="email" placeholder="E-mail" autocomplete="off" required>
                         <input type="password" id="reg-password" name="password" placeholder="Wachtwoord" required>
                         <input type="password" id="reg-password-confirm" name="password_confirm" placeholder="Herhaal wachtwoord" required>
                         <button type="submit">Registreren</button>
@@ -342,6 +355,31 @@ $typeColors = [
   src="https://kit.fontawesome.com/bb89b598a6.js"
   crossorigin="anonymous"
 ></script>
+
+<?php if (isset($_GET['modal']) && $_GET['modal'] === 'login'): ?>
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const loginModal = document.getElementById("login-register-modal");
+        if (loginModal) {
+            loginModal.style.display = "flex";
+            loginModal.classList.add("show");
+
+            // Activeer direct de login-tab
+            const loginForm = document.getElementById("login-form");
+            const registerForm = document.getElementById("register-form");
+            const loginTab = document.getElementById("login-tab");
+            const registerTab = document.getElementById("register-tab");
+
+            if (loginForm && registerForm) {
+                loginForm.style.display = "block";
+                registerForm.style.display = "none";
+                loginTab.classList.add("active-tab");
+                registerTab.classList.remove("active-tab");
+            }
+        }
+    });
+</script>
+<?php endif; ?>
 
 </body>
 </html>

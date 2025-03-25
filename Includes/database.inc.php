@@ -17,8 +17,8 @@ abstract class Database {
     private static function dbConnect() {
         $dbhost = "localhost";
         $dbname = "db_pokedex"; // Zorg dat deze klopt met je database
-        $dbuser = "root";  // Zorg dat deze klopt met je XAMPP instellingen
-        $dbpass = "";   // Laat leeg als je geen wachtwoord hebt ingesteld
+        $dbuser = "Pokedex";  // Zorg dat deze klopt met je XAMPP instellingen
+        $dbpass = "9Vad2wR5(k8fRTW)";   // Laat leeg als je geen wachtwoord hebt ingesteld
 
         $charset = "utf8mb4";
         $conn = "mysql:host=" . $dbhost . "; dbname=" . $dbname . ";charset=" . $charset;

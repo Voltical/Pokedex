@@ -1538,3 +1538,18 @@
     background-color: #821010;
     transform: translateY(1px);
   }
+
+  .leaderboard-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid red; /* tijdelijk om te testen */
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 10px;
+  text-align: center;
+}
