@@ -321,7 +321,21 @@ $typeColors = [
             </form>
         </div>
     </div>
-
+    <?php
+    if (isset($_SESSION["login_error"])) {
+        echo "document.getElementById('login-error').innerText = '{$_SESSION["login_error"]}';";
+        unset($_SESSION["login_error"]);
+    }
+    if (isset($_SESSION["register_error"])) {
+        echo "document.getElementById('register-error').innerText = '{$_SESSION["register_error"]}';";
+        unset($_SESSION["register_error"]);
+    }
+    if (isset($_SESSION["register_success"])) {
+        echo "document.getElementById('login-error').innerText = '{$_SESSION["register_success"]}';";
+        unset($_SESSION["register_success"]);
+    }
+    ?>
+});
 <script src="./script.js"></script>
 
 <script
