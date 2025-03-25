@@ -322,6 +322,32 @@ $typeColors = [
         </div>
     </div>
 
+    if (modal === "login") {
+        document.getElementById("login-form").style.display = "block";
+        document.getElementById("register-form").style.display = "none";
+    } else if (modal === "register") {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("register-form").style.display = "block";
+    }
+
+    // Foutmeldingen uit PHP-sessie tonen
+    <?php
+    session_start();
+    if (isset($_SESSION["login_error"])) {
+        echo "document.getElementById('login-error').innerText = '{$_SESSION["login_error"]}';";
+        unset($_SESSION["login_error"]);
+    }
+    if (isset($_SESSION["register_error"])) {
+        echo "document.getElementById('register-error').innerText = '{$_SESSION["register_error"]}';";
+        unset($_SESSION["register_error"]);
+    }
+    if (isset($_SESSION["register_success"])) {
+        echo "document.getElementById('login-error').innerText = '{$_SESSION["register_success"]}';";
+        unset($_SESSION["register_success"]);
+    }
+    ?>
+});
+</script>
 <script src="./script.js"></script>
 
 <script

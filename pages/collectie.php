@@ -55,7 +55,7 @@ $typeColors = [
                 <img src="../assets/logo.png" alt="Pokédex Logo" class="logo">
             </a>
             <ul>
-                <li><a href="../">Home</a></li>
+                <li><a href="../index.php">Home</a></li>
                 <li><a href="#">Pokémons</a></li>
                 <li><a href="#">Contact</a></li>
                 <li>
