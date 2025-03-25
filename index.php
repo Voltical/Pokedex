@@ -321,18 +321,7 @@ $typeColors = [
             </form>
         </div>
     </div>
-
-    if (modal === "login") {
-        document.getElementById("login-form").style.display = "block";
-        document.getElementById("register-form").style.display = "none";
-    } else if (modal === "register") {
-        document.getElementById("login-form").style.display = "none";
-        document.getElementById("register-form").style.display = "block";
-    }
-
-    // Foutmeldingen uit PHP-sessie tonen
     <?php
-    session_start();
     if (isset($_SESSION["login_error"])) {
         echo "document.getElementById('login-error').innerText = '{$_SESSION["login_error"]}';";
         unset($_SESSION["login_error"]);
@@ -347,7 +336,6 @@ $typeColors = [
     }
     ?>
 });
-</script>
 <script src="./script.js"></script>
 
 <script
